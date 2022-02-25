@@ -5,8 +5,11 @@
 #include <vector>
 #include <thread>
 #include <unordered_map>
+//#include <utility>  // for std::pair
 
 #include "Utility.h"
+#include "PrimesCalcInteger.h"
+#include "FileManager.h"
 
 class UI
 {
@@ -38,14 +41,16 @@ enum class CalculateParameters
     UPTO,
     COUNT,
     FROM,
-    TO
+    TO,
+    SEP
 };
 enum class ReadParameters
 {
     NUM,
     ID,
     FROM,
-    TO
+    TO,
+    SEP
 };
 
     static const std::string M_PROPERTIES_PATH;
@@ -54,15 +59,13 @@ enum class ReadParameters
     static const std::unordered_map<std::string, CalculateParameters> M_CALCULATE_PARAMETERS;
     static const std::unordered_map<std::string, ReadParameters> M_READ_PARAMETERS;
 
-    std::string m_task;
-
     unsigned int m_thread_count;
     std::string m_input_path;
     std::string m_output_path;
     std::string m_separator;
     bool m_async_is_default;
 
-    void interpretCommand();
+    void interpretCommand(std::string& task);
     void setProperty(std::string name, std::string value);
 
     // if property doesn't have value when read a default value should be set
@@ -72,7 +75,9 @@ enum class ReadParameters
     void displayHelp();
     void displayProperties();
 
-    void commandSet();
+    void commandSet(std::vector<std::string>& task_separated);
+    void commandCalculate(std::vector<std::string>& task_separated);
+    void commandRead(std::vector<std::string>& task_separated);
 
     // help --- list of commands
     // settings --- list of default Properties
@@ -90,6 +95,7 @@ enum class ReadParameters
     // stop --- when async calculating this can stop and save progress
     //
     // read num-[x, y] id-[x, y] from-input_file to-output_file
+    // read id "5,5000"
     //
     // NEW:
     // restore_default_settings

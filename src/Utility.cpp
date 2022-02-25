@@ -59,6 +59,44 @@ std::vector<std::string> Utility::split(std::string& s, char separator, char mer
     }
 }
 
+std::vector<std::string> Utility::split(std::string& s, char separator, std::vector<char> mergers)
+{
+    std::vector<std::string> ret;
+    size_t first = 0;
+    for(size_t i = 0; i < s.size(); ++i)
+    {
+        if(s[i] == separator)
+        {
+            if(i - first)
+            {
+                ret.push_back(s.substr(first, i - first));
+            }
+            first = i + 1;
+        }
+        else
+        {
+            for(char merger : mergers)
+            {
+                if(s[i] == merger)
+                {
+                    first = i + 1;
+                    i = s.find(merger, first);
+                    if(i != std::string::npos)
+                    {
+                        ret.push_back(s.substr(first, i - first));
+                        first = i + 1;
+                    }
+                    else
+                    {
+                        // odd number of *merger* signs
+                        return ret;
+                    }
+                }
+            }
+        }
+    }
+}
+
 inline bool Utility::isInteger(std::string& s)
 {
     for(char c : s)
