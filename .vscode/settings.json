@@ -66,6 +66,7 @@
         "unordered_map": "cpp",
         "list": "cpp",
         "xhash": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "fstream": "cpp"
     }
 }

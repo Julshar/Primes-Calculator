@@ -174,7 +174,7 @@ void UI::commandCalculate(std::vector<std::string>& task_separated)
 {
     bool async = m_async_is_default;
     unsigned int thread_count = m_thread_count;
-    std::string input_path = m_input_path;
+    std::pair<bool, std::string> input_file = {false, m_input_path};
     std::string output_path = m_output_path;
     std::string separator = m_separator;
     std::pair<bool, ull> number_cap = {false, 0};
@@ -230,7 +230,10 @@ void UI::commandCalculate(std::vector<std::string>& task_separated)
             }
             break;
         case CalculateParameters::FROM:
-            input_path = task_separated[i + 1];
+            input_file.first = true;
+
+            // if no argument after from parameter then default should be used
+            input_file.second = task_separated[i + 1];
             ++i;
             break;
         case CalculateParameters::TO:
@@ -243,35 +246,44 @@ void UI::commandCalculate(std::vector<std::string>& task_separated)
             break;
         }
     }
-    PrimesCalcInteger calc{separator, output_path, input_path};
+    PrimesCalcInteger calc;
+    if(input_file.first)
+    {
+        calc.init(separator, output_path, input_file.second);
+    }
+    else
+    {
+        calc.init(separator, output_path);
+    }
+
     if(async)
     {
         if(number_cap.first)
         {
-            calc.CalcAsyncUpto(thread_count, number_cap.second);
+            calc.calcAsyncUpto(thread_count, number_cap.second);
         }
         else if(count_cap.first)
         {
-            calc.CalcAsyncCount(thread_count, count_cap.second);
+            calc.calcAsyncCount(thread_count, count_cap.second);
         }
         else
         {
-            calc.CalcAsyncUpto(thread_count);
+            calc.calcAsyncUpto(thread_count);
         }
     }   
     else
     {
         if(number_cap.first)
         {
-            calc.CalcUpto(number_cap.second);
+            calc.calcUpto(number_cap.second);
         }
         else if(count_cap.first)
         {
-            calc.CalcCount(count_cap.second);
+            calc.calcCount(count_cap.second);
         }
         else
         {
-            calc.CalcUpto();
+            calc.calcUpto();
         }
     } 
 }
@@ -298,6 +310,7 @@ void UI::commandRead(std::vector<std::string>& task_separated)
             // task_separated[i] is invalid parameter name
             return;
         }
+        std::vector<std::string> range;
         switch(param)   // have to catch error: i + 1 can go out of task_separated bounds
         {
         case ReadParameters::FROM:
@@ -310,7 +323,7 @@ void UI::commandRead(std::vector<std::string>& task_separated)
             ++i;
             break;
         case ReadParameters::ID:
-            std::vector<std::string> range = Utility::split(task_separated[i + 1], ',');
+            range = Utility::split(task_separated[i + 1], ',');
             if(range.size() == 1)
             {
                 single_index.first = true;
@@ -332,7 +345,7 @@ void UI::commandRead(std::vector<std::string>& task_separated)
             }
             break;
         case ReadParameters::NUM:
-            std::vector<std::string> range = Utility::split(task_separated[i + 1], ',');
+            range = Utility::split(task_separated[i + 1], ',');
             if(range.size() == 2)
             {
                 num_range.first = true;
