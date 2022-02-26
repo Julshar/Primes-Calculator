@@ -11,10 +11,10 @@
 class PrimesCalcInteger
 {
 public:
-    PrimesCalcInteger(std::string separator, std::string output_file, std::string input_file);
+    PrimesCalcInteger(bool* stop_flag, std::string separator, std::string output_file, std::string input_file);
     PrimesCalcInteger();
-    void init(std::string separator, std::string output_file, std::string input_file);
-    void init(std::string separator, std::string output_file);
+    void init(bool* stop_flag, std::string separator, std::string output_file, std::string input_file);
+    void init(bool* stop_flag, std::string separator, std::string output_file);
 
     void calcUpto(unsigned long long max = MAX_ULL);
     void calcCount(unsigned int count);
@@ -34,4 +34,5 @@ private:
     std::mutex m_current_number_lock;
 
     bool checkIfIsPrime(unsigned long long number, std::vector<unsigned long long>& primes);
+    bool checkIfIsPrime(unsigned long long number);
 };

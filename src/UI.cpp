@@ -76,7 +76,10 @@ void UI::interpretCommand(std::string& task)
             break;
 
         case Commands::STOP:
-            // stop calculations if currently working and if async mode active
+            if(m_async_active)
+            {
+                *m_stop_flag = true;
+            }
             break;
 
         case Commands::SET:
@@ -249,15 +252,16 @@ void UI::commandCalculate(std::vector<std::string>& task_separated)
     PrimesCalcInteger calc;
     if(input_file.first)
     {
-        calc.init(separator, output_path, input_file.second);
+        calc.init(m_stop_flag, separator, output_path, input_file.second);
     }
     else
     {
-        calc.init(separator, output_path);
+        calc.init(m_stop_flag, separator, output_path);
     }
 
     if(async)
     {
+        m_async_active = true;
         if(number_cap.first)
         {
             calc.calcAsyncUpto(thread_count, number_cap.second);
@@ -270,6 +274,7 @@ void UI::commandCalculate(std::vector<std::string>& task_separated)
         {
             calc.calcAsyncUpto(thread_count);
         }
+        m_async_active = false;
     }   
     else
     {

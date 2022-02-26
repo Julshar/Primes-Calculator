@@ -59,6 +59,9 @@ enum class ReadParameters
     static const std::unordered_map<std::string, CalculateParameters> M_CALCULATE_PARAMETERS;
     static const std::unordered_map<std::string, ReadParameters> M_READ_PARAMETERS;
 
+    bool* m_stop_flag;
+    bool m_async_active;
+
     unsigned int m_thread_count;
     std::string m_input_path;
     std::string m_output_path;
