@@ -1,7 +1,7 @@
 #include "UI.h"
 
 typedef unsigned long long ull;
-const std::string UI::M_PROPERTIES_PATH = "properties.txt";
+
 const std::unordered_map<std::string, UI::Commands> UI::M_COMMANDS = 
 {
     {"help", Commands::HELP},
@@ -97,24 +97,22 @@ void UI::interpretCommand(std::string& task)
     }
 }
 
-void UI::setProperty(std::string name, std::string value)
-{
-
-}
-
-void UI::readProperty(std::string name)
-{
-    
-}
-
 void UI::displayHelp()
 {
-
+    std::cout << "settings - " << "Display default properties" << "\n" <<
+    "stop - " << "Immediately stop calculations and save calculated prime numbers (works only for async mode)" << "\n" <<
+    "set - " << "Set value of specified property - \"set property_name value\"" << "\n" <<
+    "calculate - " << "Begin calculating prime numbers" << "\n" <<
+    "read - " << "Read specified prime numbers from file" << "\n";
 }
 
 void UI::displayProperties()
 {
-
+    std::cout << "number_of_threads : " << m_thread_count << "\n" <<
+    "input_path : " << m_input_path << "\n" <<
+    "output_path : " << m_output_path << "\n" <<
+    "separator : " << m_separator << "\n" <<
+    "async_is_default : " << m_async_is_default << "\n";
 }
 
 void UI::commandSet(std::vector<std::string>& task_separated)
@@ -165,7 +163,7 @@ void UI::commandSet(std::vector<std::string>& task_separated)
             m_separator = task_separated[2];
             break;
         }
-        setProperty(task_separated[1], task_separated[2]);
+        FileManager::setProperty(task_separated[1], task_separated[2]);
     }
     else
     {

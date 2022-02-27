@@ -9,7 +9,7 @@ PrimesCalcInteger::PrimesCalcInteger(bool* stop_flag, std::string separator, std
 
 PrimesCalcInteger::PrimesCalcInteger()
 {
-    //init(", ", "primes");
+
 }
 
 void PrimesCalcInteger::init(bool* stop_flag, std::string separator, std::string output_file, std::string input_file)

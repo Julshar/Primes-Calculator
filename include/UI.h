@@ -53,7 +53,6 @@ enum class ReadParameters
     SEP
 };
 
-    static const std::string M_PROPERTIES_PATH;
     static const std::unordered_map<std::string, Commands> M_COMMANDS;
     static const std::unordered_map<std::string, PropertyNames> M_PROPERTY_NAMES;
     static const std::unordered_map<std::string, CalculateParameters> M_CALCULATE_PARAMETERS;
@@ -69,11 +68,9 @@ enum class ReadParameters
     bool m_async_is_default;
 
     void interpretCommand(std::string& task);
-    void setProperty(std::string name, std::string value);
 
     // if property doesn't have value when read a default value should be set
     // ex. number of threads is unknown before first execute. default value would be -> std::thread::hardware_concurrency() / 2;
-    void readProperty(std::string name);
 
     void displayHelp();
     void displayProperties();
