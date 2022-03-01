@@ -88,7 +88,7 @@ void FileManager::readIndexRange(std::string& file_path, size_t from, size_t to,
     }
 }
 
-std::string FileManager::readProperty(std::string& name)
+std::string FileManager::readProperty(const std::string& name)
 {
     std::vector<char> buffer;
     readWholeFile(M_PROPERTIES_PATH, buffer);
@@ -101,7 +101,7 @@ std::string FileManager::readProperty(std::string& name)
     }
 }
 
-void FileManager::setProperty(std::string& name, std::string& value)
+void FileManager::setProperty(const std::string& name, const std::string& value)
 {
     std::vector<char> buffer;
     readWholeFile(M_PROPERTIES_PATH, buffer);
@@ -228,7 +228,7 @@ inline std::vector<char> FileManager::identifySeparator(std::vector<char>& byte_
     return byte_sep;
 }
 
-size_t FileManager::findProperty(std::vector<char>& file_data, std::string& name)
+size_t FileManager::findProperty(std::vector<char>& file_data, const std::string& name)
 {
     size_t first = 0;
     size_t last = name.size();

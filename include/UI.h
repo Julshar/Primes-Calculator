@@ -15,6 +15,7 @@ class UI
 {
 public:
     UI();
+    UI(bool* terminate_flag);
     void getTask();
 
 private:
@@ -59,7 +60,8 @@ enum class ReadParameters
     static const std::unordered_map<std::string, ReadParameters> M_READ_PARAMETERS;
 
     bool* m_stop_flag;
-    bool m_async_active;
+    bool m_terminate_flag = false;
+    bool m_async_active = false;
 
     unsigned int m_thread_count;
     std::string m_input_path;
@@ -67,6 +69,7 @@ enum class ReadParameters
     std::string m_separator;
     bool m_async_is_default;
 
+    void init();
     void interpretCommand(std::string& task);
 
     // if property doesn't have value when read a default value should be set

@@ -37,9 +37,13 @@ const std::unordered_map<std::string, UI::ReadParameters> UI::M_READ_PARAMETERS 
 
 UI::UI()
 {
-    m_thread_count = std::thread::hardware_concurrency() / 2;
-    m_separator = ", ";
+    init();
+}
 
+UI::UI(bool* terminate_flag)
+{
+    terminate_flag = &m_terminate_flag;
+    init();
 }
 
 void UI::getTask()
@@ -47,6 +51,31 @@ void UI::getTask()
     std::string task;
     std::getline(std::cin, task);
     interpretCommand(task);
+}
+
+void UI::init()
+{
+    std::string val = FileManager::readProperty("number_of_threads");
+    if(val.empty())
+    {
+        m_thread_count = std::thread::hardware_concurrency() / 2;
+        FileManager::setProperty("number_of_threads", std::to_string(m_thread_count));
+    }
+    else
+    {
+        m_thread_count = std::stoi(val);
+    }
+    m_input_path = FileManager::readProperty("input_path");
+    m_output_path = FileManager::readProperty("output_path");
+    m_separator = FileManager::readProperty("separator");
+    std::string val = FileManager::readProperty("async_is_default");
+    if(val == "true") m_async_is_default = true;
+    else{
+        m_async_is_default = false;
+    }
+
+    m_thread_count = std::thread::hardware_concurrency() / 2;
+    m_separator = ", ";
 }
 
 void UI::interpretCommand(std::string& task)

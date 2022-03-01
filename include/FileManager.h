@@ -16,8 +16,8 @@ public:
     static void readRange(std::string& file_path, unsigned long long min, unsigned long long max, std::vector<unsigned long long>& buffer);
     static void readIndexRange(std::string& file_path, size_t from, size_t to, std::vector<unsigned long long>& buffer);
 
-    static std::string readProperty(std::string& name);
-    static void setProperty(std::string& name, std::string& value);
+    static std::string readProperty(const std::string& name);
+    static void setProperty(const std::string& name, const std::string& value);
 
 private:
     static const std::string M_PROPERTIES_PATH;
@@ -28,5 +28,5 @@ private:
     static void readWholeFile(const std::string& file_path, std::vector<char>& buffer);
     static std::vector<char> convertSeparatorToByte(std::string separator);
     static std::vector<char> identifySeparator(std::vector<char>& byte_primes);
-    static size_t findProperty(std::vector<char>& file_data, std::string& name);
+    static size_t findProperty(std::vector<char>& file_data, const std::string& name);
 };
