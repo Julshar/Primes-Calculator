@@ -3,7 +3,9 @@ Simple program designed to calculate prime numbers efficiently
 Developed for learning purposes
 
 WORK IN PROGRESS
+
 The app is pretty far from being finished
+
 There may be critical bugs in code as the initial version of app is not debugged yet
 
 General goals:
