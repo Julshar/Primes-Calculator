@@ -1,11 +1,9 @@
 # Primes-Calculator
-Simple program designed to calculate prime numbers efficiently
-Developed for learning purposes
+Simple program designed to calculate prime numbers efficiently. Developed for learning purposes
 
 WORK IN PROGRESS
 
-The app is in development state
-There may be critical bugs in code as the initial version of app is not debugged yet
+This app is in development state. There may be critical bugs in code as the initial version of app is not debugged yet
 
 General goals:
 - Fully corss platform
