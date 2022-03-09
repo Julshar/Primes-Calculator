@@ -1,4 +1,5 @@
-#include "FileManager.h"
+// #include <FileManager.h>
+#include "../include/FileManager.h"
 
 typedef unsigned long long ull;
 
@@ -99,6 +100,7 @@ std::string FileManager::readProperty(const std::string& name)
     {
         return *(property_it + 2);
     }
+    // No such property exist
 }
 
 void FileManager::setProperty(const std::string& name, const std::string& value)

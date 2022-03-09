@@ -1,4 +1,4 @@
-#include "PrimesAll.h"
+#include "../include/PrimesAll.h"
 
 void PrimesAll::Init()
 {

@@ -1,4 +1,5 @@
-#include "PrimesCalcInteger.h"
+// #include "PrimesCalcInteger.h"
+#include "../include/PrimesCalcInteger.h"
 
 typedef unsigned long long ull;
 
@@ -33,7 +34,7 @@ void PrimesCalcInteger::init(bool* stop_flag, std::string separator, std::string
     m_current_number = {5};
 }
 
-void PrimesCalcInteger::calcUpto(unsigned long long max = MAX_ULL)
+void PrimesCalcInteger::calcUpto(unsigned long long max)
 {
     while(m_current_number < max)
     {
@@ -62,7 +63,7 @@ void PrimesCalcInteger::calcCount(unsigned int count)
     }
 }
 
-void PrimesCalcInteger::calcAsyncUpto(unsigned int thread_count, unsigned long long max = MAX_ULL)
+void PrimesCalcInteger::calcAsyncUpto(unsigned int thread_count, unsigned long long max)
 {
     std::vector<std::thread> threadpool;
     for(int i = 0; i < thread_count; ++i)

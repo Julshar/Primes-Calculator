@@ -1,4 +1,5 @@
 #include "include/PrimesAll.h"
+#include "include/UI.h"
 
 int main()
 {

@@ -1,4 +1,5 @@
-#include "Utility.h"
+// #include "Utility.h"
+#include "../include/Utility.h"
 
 #ifdef WIN32
 #define OS_SEP '\\'
@@ -97,7 +98,8 @@ std::vector<std::string> Utility::split(std::string& s, char separator, std::vec
     }
 }
 
-inline bool Utility::isInteger(std::string& s)
+// undefined reference during compilation when "inline" keyword is present. Why?
+bool Utility::isInteger(std::string& s)
 {
     for(char c : s)
     {

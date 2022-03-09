@@ -1,4 +1,5 @@
-#include "UI.h"
+// #include <UI.h>
+#include "../include/UI.h"
 
 typedef unsigned long long ull;
 
@@ -68,8 +69,8 @@ void UI::init()
     m_input_path = FileManager::readProperty("input_path");
     m_output_path = FileManager::readProperty("output_path");
     m_separator = FileManager::readProperty("separator");
-    std::string val = FileManager::readProperty("async_is_default");
-    if(val == "true") m_async_is_default = true;
+    std::string is_async = FileManager::readProperty("async_is_default");
+    if(is_async == "true") m_async_is_default = true;
     else{
         m_async_is_default = false;
     }
