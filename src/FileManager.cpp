@@ -93,14 +93,24 @@ std::string FileManager::readProperty(const std::string& name)
 {
     std::vector<char> buffer;
     readWholeFile(M_PROPERTIES_PATH, buffer);
-    std::string file_data(buffer.begin(), buffer.end());
-    std::vector<std::string> data_separated = Utility::split(file_data, ' ', '\"');
-    auto property_it = std::find(data_separated.begin(), data_separated.end(), name);
-    if(property_it != data_separated.end())
+    size_t first_char = findProperty(buffer, name);
+    if(first_char == buffer.size())
     {
-        return *(property_it + 2);
+        // property not found
     }
-    // No such property exist
+    auto last_char = std::find(buffer.begin() + first_char, buffer.end(), '\"');
+    std::string value(buffer.begin() + first_char, last_char);
+    return value;
+
+    // std::string file_data(buffer.begin(), buffer.end());
+    // std::vector<std::string> data_separated = Utility::split(file_data, ' ', '\"');
+    // auto property_it = std::find(data_separated.begin(), data_separated.end(), name);
+    // if(property_it != data_separated.end())
+    // {
+    //     return *(property_it + 2);
+    // }
+    // // No such property exist
+    // return "";
 }
 
 void FileManager::setProperty(const std::string& name, const std::string& value)
@@ -180,10 +190,10 @@ void FileManager::readWholeFile(std::string& file_path, std::vector<char>& buffe
         // failed to open file
         return;
     }
-    is.seekg(0, std::ios::end);
+    is.seekg(0, is.end);
     size_t size = is.tellg();
+    is.seekg(0, is.beg);
     buffer.resize(size);
-    is.seekg(0);
     is.read(&buffer[0], size);
     is.close();
 }
@@ -196,10 +206,10 @@ void FileManager::readWholeFile(const std::string& file_path, std::vector<char>&
         // failed to open file
         return;
     }
-    is.seekg(0, std::ios::end);
+    is.seekg(0, is.end);
     size_t size = is.tellg();
+    is.seekg(0, is.beg);
     buffer.resize(size);
-    is.seekg(0);
     is.read(&buffer[0], size);
     is.close();
 }
@@ -211,6 +221,7 @@ inline std::vector<char> FileManager::convertSeparatorToByte(std::string separat
     {
         byte_sep.push_back(c);
     }
+    return byte_sep;
 }
 
 inline std::vector<char> FileManager::identifySeparator(std::vector<char>& byte_primes)
@@ -230,6 +241,7 @@ inline std::vector<char> FileManager::identifySeparator(std::vector<char>& byte_
     return byte_sep;
 }
 
+// Returns index of the first character of data labeled by name. If not found returns size of input data.
 size_t FileManager::findProperty(std::vector<char>& file_data, const std::string& name)
 {
     size_t first = 0;

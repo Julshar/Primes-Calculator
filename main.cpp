@@ -1,11 +1,10 @@
 #include "include/PrimesAll.h"
-#include "include/UI.h"
+//#include "include/UI.h"
 
 int main()
 {
-    bool* terminate;
-    UI ui{terminate};
-    while(*terminate)
+    UI ui;
+    while(!ui.terminate())
     {
         ui.getTask();
     }

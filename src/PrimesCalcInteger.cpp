@@ -165,6 +165,11 @@ void PrimesCalcInteger::calcAsyncCount(unsigned int thread_count, unsigned int c
     }
 }
 
+void PrimesCalcInteger::saveToFile()
+{
+    FileManager::savePrimes(m_output_file, m_separator, m_primes);
+}
+
 inline bool PrimesCalcInteger::checkIfIsPrime(unsigned long long number, std::vector<unsigned long long>& primes)
 {
     ull* curr_prime = &primes.front() + 1;

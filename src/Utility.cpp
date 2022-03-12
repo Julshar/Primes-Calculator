@@ -7,6 +7,8 @@
 #define OS_SEP '/'
 #endif
 
+// Splits s into pieces separated by separator sign.
+// Separator signs are ignored. Multiple consecutive separator signs are ignored.
 std::vector<std::string> Utility::split(std::string& s, char separator)
 {
     std::vector<std::string> ret;
@@ -28,6 +30,9 @@ std::vector<std::string> Utility::split(std::string& s, char separator)
     return ret;
 }
 
+// Splits s into pieces separated by separator sign.
+// Separator signs are ignored. Multiple consecutive separator signs are ignored.
+// Merger signs allow to create split data piece with separator sign inside.
 std::vector<std::string> Utility::split(std::string& s, char separator, char merger)
 {
     std::vector<std::string> ret;
@@ -53,13 +58,21 @@ std::vector<std::string> Utility::split(std::string& s, char separator, char mer
             }
             else
             {
-                // odd number of *merger* signs
+                // error: odd number of *merger* signs
                 return ret;
             }
         }
+        else if(i == s.size() - 1)  // last data piece addition (when it is not followed by separator)
+        {
+            ret.push_back(s.substr(first, s.size()));
+        }
     }
+    return ret;
 }
 
+// Splits s into pieces separated by separator sign.
+// Separator signs are ignored. Multiple consecutive separator signs are ignored.
+// Merger signs allow to create split data piece with separator sign inside.
 std::vector<std::string> Utility::split(std::string& s, char separator, std::vector<char> mergers)
 {
     std::vector<std::string> ret;
@@ -86,6 +99,7 @@ std::vector<std::string> Utility::split(std::string& s, char separator, std::vec
                     {
                         ret.push_back(s.substr(first, i - first));
                         first = i + 1;
+                        break;
                     }
                     else
                     {
@@ -95,7 +109,12 @@ std::vector<std::string> Utility::split(std::string& s, char separator, std::vec
                 }
             }
         }
+        if(i == s.size() - 1)  // last data piece addition (when it is not followed by separator)
+        {
+            ret.push_back(s.substr(first, s.size()));
+        }
     }
+    return ret;
 }
 
 // undefined reference during compilation when "inline" keyword is present. Why?

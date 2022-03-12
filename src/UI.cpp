@@ -10,7 +10,8 @@ const std::unordered_map<std::string, UI::Commands> UI::M_COMMANDS =
     {"stop", Commands::STOP},
     {"set", Commands::SET},
     {"calculate", Commands::CALCULATE},
-    {"read", Commands::READ}
+    {"read", Commands::READ},
+    {"exit", Commands::EXIT}
 };
 const std::unordered_map<std::string, UI::PropertyNames> UI::M_PROPERTY_NAMES =
 {
@@ -36,14 +37,46 @@ const std::unordered_map<std::string, UI::ReadParameters> UI::M_READ_PARAMETERS 
     {"to", ReadParameters::TO}
 };
 
+const std::string UI::M_DEFAULT_OUTPUT_PATH = "data/primes.txt";
+const std::string UI::M_HELP_INFO = 
+"\n"
+"\n***PRIME NUMBERS CALCULATOR***"
+"\n"
+"\nGeneral info"
+"\n\tInput syntax: \"command parameter_1 value_1 parameter_2 value_2\""
+"\n\tEvery input should start with command."
+"\n\tSome commands require mandatory and allow optional parameters."
+"\n\tThese commands should be followed by parameters with values as the example syntax shows."
+"\n\tOrder of the parameters does not matter."
+"\n\tWords should be separated by spaces."
+"\n\tIf a value contains space this value should be within \" signs - ex. \", \" for a separator value."
+"\n\tIf user does not provide a value for a parameter program will try to use defauld value."
+"\n"
+"\nCOMMANDS:"
+"\n"
+"\nhelp - Display user manual."
+"\nsettings - Display default properties."
+"\nset - Set value of specified property."
+"\n\tsyntax: \"set property_name value\""
+"\nstop - Immediately stop calculations and save calculated prime numbers to perviously specified file (works only for async mode)."
+"\ncalculate - Begin calculating prime numbers."
+"\n\tparameters:"
+"\n\tasync - Enable multithread mode. Value is number of threads."
+"\n\tupto - Do calculations until a number specified by *value* is encountered (exclusively)."
+"\n\tcount - Do calculations until *value* prime numbers have been calculated."
+"\n\tfrom - Specify input file containing perviously calculated prime numbers."
+"\n\tto - Specify output file where calculated prime numbers will be saved (it does not have to exist)."
+"\nread - Read specified prime numbers from file."
+"\n\tparameters:"
+"\n\tnum - specify range of demanded prime numbers by number size: \"lowest_number, highest_number\""
+"\n\tid - specify range of demanded prime numbers by index: \"lowest_index, highest_index\""
+"\n\tfrom - specify input file containing prime numbers."
+"\n\tto - specify output file where read prime numbers will be saved."
+"\n";
+
+
 UI::UI()
 {
-    init();
-}
-
-UI::UI(bool* terminate_flag)
-{
-    terminate_flag = &m_terminate_flag;
     init();
 }
 
@@ -54,29 +87,46 @@ void UI::getTask()
     interpretCommand(task);
 }
 
+bool UI::terminate()
+{
+    return m_terminate_flag;
+}
+
 void UI::init()
 {
-    std::string val = FileManager::readProperty("number_of_threads");
-    if(val.empty())
+    m_terminate_flag = false;
+    std::string read_thread_count = FileManager::readProperty("number_of_threads");
+    if(read_thread_count.empty())
     {
         m_thread_count = std::thread::hardware_concurrency() / 2;
         FileManager::setProperty("number_of_threads", std::to_string(m_thread_count));
     }
     else
     {
-        m_thread_count = std::stoi(val);
+        m_thread_count = std::stoi(read_thread_count);
     }
+
     m_input_path = FileManager::readProperty("input_path");
+
     m_output_path = FileManager::readProperty("output_path");
+    if(m_output_path.empty())
+    {
+        m_output_path = M_DEFAULT_OUTPUT_PATH;
+        FileManager::setProperty("output_path", m_output_path);
+    }
+
     m_separator = FileManager::readProperty("separator");
+    if(m_separator.empty())
+    {
+        m_separator = ", ";
+        FileManager::setProperty("separator", m_separator);
+    }
+
     std::string is_async = FileManager::readProperty("async_is_default");
     if(is_async == "true") m_async_is_default = true;
     else{
         m_async_is_default = false;
     }
-
-    m_thread_count = std::thread::hardware_concurrency() / 2;
-    m_separator = ", ";
 }
 
 void UI::interpretCommand(std::string& task)
@@ -123,17 +173,17 @@ void UI::interpretCommand(std::string& task)
         case Commands::READ:
             commandRead(task_separated);
             break;
+
+        case Commands::EXIT:
+            m_terminate_flag = true;
+            break;
         }
     }
 }
 
 void UI::displayHelp()
 {
-    std::cout << "settings - " << "Display default properties" << "\n" <<
-    "stop - " << "Immediately stop calculations and save calculated prime numbers (works only for async mode)" << "\n" <<
-    "set - " << "Set value of specified property - \"set property_name value\"" << "\n" <<
-    "calculate - " << "Begin calculating prime numbers" << "\n" <<
-    "read - " << "Read specified prime numbers from file" << "\n";
+    std::cout << M_HELP_INFO;
 }
 
 void UI::displayProperties()
@@ -163,9 +213,11 @@ void UI::commandSet(std::vector<std::string>& task_separated)
         switch(prop)
         {
         case PropertyNames::ASYNC_IS_DEFAULT:
-            if(task_separated[2] == "true" || task_separated[2] == "false") break;
-            else if(task_separated[2] == "1") task_separated[2] = "true";
+            if(task_separated[2] == "1") task_separated[2] = "true";
             else if(task_separated[2] == "0") task_separated[2] = "false";
+
+            if(task_separated[2] == "true") m_async_is_default = true;
+            else if(task_separated[2] == "false") m_async_is_default = false;
             else
             {
                 // invalid value
@@ -319,6 +371,7 @@ void UI::commandCalculate(std::vector<std::string>& task_separated)
             calc.calcUpto();
         }
     } 
+    calc.saveToFile();
 }
 
 void UI::commandRead(std::vector<std::string>& task_separated)

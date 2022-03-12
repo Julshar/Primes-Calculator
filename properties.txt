@@ -1,5 +1,0 @@
-number_of_threads : ""
-input_path : ""
-output_path : ""
-separator : ", "
-async_is_default : "true"

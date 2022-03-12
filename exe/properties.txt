@@ -1,0 +1,5 @@
+number_of_threads : ""
+input_path : ""
+output_path : "data/primes.txt"
+separator : ", "
+async_is_default : "false"

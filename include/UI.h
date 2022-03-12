@@ -15,8 +15,8 @@ class UI
 {
 public:
     UI();
-    UI(bool* terminate_flag);
     void getTask();
+    bool terminate();
 
 private:
 enum class Commands
@@ -26,7 +26,8 @@ enum class Commands
     STOP,
     SET,
     CALCULATE,
-    READ
+    READ,
+    EXIT
 };
 enum class PropertyNames
 {
@@ -59,8 +60,11 @@ enum class ReadParameters
     static const std::unordered_map<std::string, CalculateParameters> M_CALCULATE_PARAMETERS;
     static const std::unordered_map<std::string, ReadParameters> M_READ_PARAMETERS;
 
+    static const std::string M_DEFAULT_OUTPUT_PATH;
+    static const std::string M_HELP_INFO;
+
     bool* m_stop_flag;
-    bool m_terminate_flag = false;
+    bool m_terminate_flag;
     bool m_async_active = false;
 
     unsigned int m_thread_count;

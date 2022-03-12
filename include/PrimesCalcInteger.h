@@ -21,6 +21,8 @@ public:
     void calcAsyncUpto(unsigned int thread_count, unsigned long long max = MAX_ULL);
     void calcAsyncCount(unsigned int thread_count, unsigned int count);
 
+    void saveToFile();
+
 private:
     static constexpr unsigned long long MAX_ULL = ULLONG_MAX - 1000;
 
