@@ -101,16 +101,6 @@ std::string FileManager::readProperty(const std::string& name)
     auto last_char = std::find(buffer.begin() + first_char, buffer.end(), '\"');
     std::string value(buffer.begin() + first_char, last_char);
     return value;
-
-    // std::string file_data(buffer.begin(), buffer.end());
-    // std::vector<std::string> data_separated = Utility::split(file_data, ' ', '\"');
-    // auto property_it = std::find(data_separated.begin(), data_separated.end(), name);
-    // if(property_it != data_separated.end())
-    // {
-    //     return *(property_it + 2);
-    // }
-    // // No such property exist
-    // return "";
 }
 
 void FileManager::setProperty(const std::string& name, const std::string& value)

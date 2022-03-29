@@ -11,7 +11,8 @@ const std::unordered_map<std::string, UI::Commands> UI::M_COMMANDS =
     {"set", Commands::SET},
     {"calculate", Commands::CALCULATE},
     {"read", Commands::READ},
-    {"exit", Commands::EXIT}
+    {"exit", Commands::EXIT},
+    {"restore", Commands::RESTORE}
 };
 const std::unordered_map<std::string, UI::PropertyNames> UI::M_PROPERTY_NAMES =
 {
@@ -177,6 +178,10 @@ void UI::interpretCommand(std::string& task)
         case Commands::EXIT:
             m_terminate_flag = true;
             break;
+
+        case Commands::RESTORE:
+            restoreDefaultSettings();
+            break;
         }
     }
 }
@@ -193,6 +198,16 @@ void UI::displayProperties()
     "output_path : " << m_output_path << "\n" <<
     "separator : " << m_separator << "\n" <<
     "async_is_default : " << m_async_is_default << "\n";
+}
+
+void UI::restoreDefaultSettings()
+{
+    unsigned int thread_count = std::thread::hardware_concurrency() / 2;
+    FileManager::setProperty("number_of_threads", std::to_string(thread_count));
+    FileManager::setProperty("separator", ", ");
+    FileManager::setProperty("async_is_default", "false");
+    FileManager::setProperty("input_path", "");
+    FileManager::setProperty("output_path", "data/primes.txt");
 }
 
 void UI::commandSet(std::vector<std::string>& task_separated)
@@ -235,6 +250,7 @@ void UI::commandSet(std::vector<std::string>& task_separated)
                 // invalid value
                 return;
             }
+            m_thread_count = std::stoi(task_separated[2]);
             break;
 
         case PropertyNames::OUTPUT_PATH:

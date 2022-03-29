@@ -1,4 +1,4 @@
-number_of_threads : ""
+number_of_threads : "8"
 input_path : ""
 output_path : "data/primes.txt"
 separator : ", "

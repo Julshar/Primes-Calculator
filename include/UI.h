@@ -27,7 +27,8 @@ enum class Commands
     SET,
     CALCULATE,
     READ,
-    EXIT
+    EXIT,
+    RESTORE
 };
 enum class PropertyNames
 {
@@ -76,35 +77,11 @@ enum class ReadParameters
     void init();
     void interpretCommand(std::string& task);
 
-    // if property doesn't have value when read a default value should be set
-    // ex. number of threads is unknown before first execute. default value would be -> std::thread::hardware_concurrency() / 2;
-
     void displayHelp();
     void displayProperties();
+    void restoreDefaultSettings();
 
     void commandSet(std::vector<std::string>& task_separated);
     void commandCalculate(std::vector<std::string>& task_separated);
     void commandRead(std::vector<std::string>& task_separated);
-
-    // help --- list of commands
-    // settings --- list of default Properties
-    // set Property_name new_value
-    //
-    // calculate 
-    // (async)-(number_of_threads) 
-    // (upto)-max_prime (count)-prime_count --- one of these has to be specified EDIT: NOT TRUE! IF NOT SPECIFIED AND ASYNC ACTIVATED CAN USE STOP COMMAND
-    // (from)-(input_file) (to)-(output_file)
-    // ex.
-    // calculate async 5 upto 10000 from to C:/dev/c++/proj/primes.txt
-    // vs
-    // calculate async-5 upto-10000 from- to-C:/dev/c++/proj/primes.txt
-    //
-    // stop --- when async calculating this can stop and save progress
-    //
-    // read num-[x, y] id-[x, y] from-input_file to-output_file
-    // read id "5,5000"
-    //
-    // NEW:
-    // restore_default_settings
-
 };
